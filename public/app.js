@@ -164,12 +164,50 @@
   }
 
   // ---------- Text-to-speech ----------
+  let voices = [];
+  let germanVoiceLogged = false;
+
+  function loadVoices() {
+    voices = window.speechSynthesis.getVoices();
+  }
+  if ('speechSynthesis' in window) {
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
+
+  function pickGermanVoice() {
+    return (
+      voices.find((v) => v.lang && v.lang.toLowerCase().startsWith('de')) ||
+      voices.find((v) => /german|deutsch/i.test(v.name)) ||
+      null
+    );
+  }
+
   function speak(text) {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = 1.02;
     utterance.pitch = 0.9;
+
+    const germanVoice = pickGermanVoice();
+    if (germanVoice) {
+      utterance.voice = germanVoice;
+      utterance.lang = germanVoice.lang;
+      if (!germanVoiceLogged) {
+        addLog(`Voice set: ${germanVoice.name} (${germanVoice.lang})`);
+        germanVoiceLogged = true;
+      }
+    } else {
+      // No German voice installed in this browser; fall back to default
+      // English voice but hint the accent via the lang tag.
+      utterance.lang = 'de-DE';
+      if (!germanVoiceLogged) {
+        addLog('No German voice found on this device; using default voice');
+        germanVoiceLogged = true;
+      }
+    }
+
     utterance.onstart = () => setCoreState('speaking');
     utterance.onend = () => setCoreState('idle');
     window.speechSynthesis.speak(utterance);
