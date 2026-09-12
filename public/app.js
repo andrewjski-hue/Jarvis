@@ -235,6 +235,10 @@
         throw new Error(data.error || 'Unknown error');
       }
 
+      if (Array.isArray(data.toolLog)) {
+        for (const entry of data.toolLog) addLog(entry);
+      }
+
       state.messages.push({ role: 'assistant', content: data.text });
       addMessage('assistant', data.text);
       addLog('JARVIS: response received');
