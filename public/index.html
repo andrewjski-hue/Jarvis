@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JARVIS</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="scanlines"></div>
+
+<div class="hud">
+  <header class="hud-header">
+    <span class="brand">J.A.R.V.I.S.</span>
+    <span class="clock" id="clock">00:00:00</span>
+  </header>
+
+  <div class="hud-grid">
+    <!-- Left panel: audio level + activity log -->
+    <aside class="panel panel-left">
+      <div class="panel-title">AUDIO INPUT</div>
+      <div class="waveform" id="waveform" aria-hidden="true"></div>
+
+      <div class="panel-title">LOG</div>
+      <ul class="log" id="log"></ul>
+    </aside>
+
+    <!-- Center: the core + conversation -->
+    <main class="panel panel-center">
+      <div class="core-wrap">
+        <div class="core" id="core">
+          <div class="core-ring ring-outer"></div>
+          <div class="core-ring ring-mid"></div>
+          <div class="core-ring ring-inner"></div>
+          <div class="core-glow"></div>
+          <div class="core-status" id="coreStatus">STANDBY</div>
+        </div>
+      </div>
+
+      <div class="conversation" id="conversation"></div>
+
+      <form class="input-row" id="inputForm">
+        <button type="button" class="mic-btn" id="micBtn" aria-label="Toggle microphone">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+        <input type="text" id="textInput" placeholder="Speak, or type a command..." autocomplete="off" />
+        <button type="submit" class="send-btn">SEND</button>
+      </form>
+    </main>
+
+    <!-- Right panel: gauges + status grid -->
+    <aside class="panel panel-right">
+      <div class="panel-title">SYSTEM</div>
+      <div class="gauges">
+        <div class="gauge" data-gauge="listen">
+          <svg viewBox="0 0 100 100">
+            <circle class="gauge-track" cx="50" cy="50" r="42"/>
+            <circle class="gauge-fill" cx="50" cy="50" r="42"/>
+          </svg>
+          <span class="gauge-label">MIC</span>
+          <span class="gauge-value">0%</span>
+        </div>
+        <div class="gauge" data-gauge="think">
+          <svg viewBox="0 0 100 100">
+            <circle class="gauge-track" cx="50" cy="50" r="42"/>
+            <circle class="gauge-fill" cx="50" cy="50" r="42"/>
+          </svg>
+          <span class="gauge-label">PROC</span>
+          <span class="gauge-value">0%</span>
+        </div>
+      </div>
+
+      <div class="panel-title">SESSION</div>
+      <div class="stat-grid" id="statGrid"></div>
+    </aside>
+  </div>
+
+  <footer class="hud-footer">
+    <span id="statusLine">SYSTEM READY &mdash; PRESS MIC OR TYPE TO BEGIN</span>
+  </footer>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
